@@ -216,8 +216,8 @@ def webhook():
 def health():
     return "ok", 200
 
-if __name__ == "__main__":
-    if not PUBLIC_URL:
-        raise RuntimeError("Set RENDER_EXTERNAL_URL in Render environment.")
-    tg("setWebhook", {"url": PUBLIC_URL + "/telegram"})
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "10000")))
+if PUBLIC_URL:
+    try:
+        tg("setWebhook", {"url": PUBLIC_URL + "/telegram"})
+    except Exception:
+        logging.exception("Webhook setup failed")
